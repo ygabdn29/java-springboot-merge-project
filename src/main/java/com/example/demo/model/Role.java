@@ -25,12 +25,18 @@ public class Role {
     @Column
     private String name;
 
-    @OneToMany(mappedBy="role")
+    @Column
+    private Integer level;
+
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
-    public Role(Integer id, String name, List<User> users) {
+    public Role(){}
+
+    public Role(Integer id, String name, Integer level, List<User> users) {
       this.id = id;
       this.name = name;
+      this.level = level;
       this.users = users;
     }
 
@@ -50,6 +56,14 @@ public class Role {
       this.name = name;
     }
 
+    public Integer getLevel() {
+      return level;
+    }
+
+    public void setLevel(Integer level) {
+      this.level = level;
+    }
+
     public List<User> getUsers() {
       return users;
     }
@@ -57,6 +71,4 @@ public class Role {
     public void setUsers(List<User> users) {
       this.users = users;
     }
-
-     
 }

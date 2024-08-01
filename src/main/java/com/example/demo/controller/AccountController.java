@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.model.User;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 
 @Controller
 @RequestMapping("userlogin")
 public class AccountController {
-   @Autowired
+    @Autowired
     private UserService userService;
+
 
     @GetMapping("testlogin")
     public String index(Model model){
@@ -39,11 +41,9 @@ public class AccountController {
    }
 
    @GetMapping("role")
-   public String roleIndex(){
-    
+   public String roleIndex(Model model){
+      model.addAttribute("users", userService.get());
+
+      return "roleManagement/roleManagement";
    }
-}
-
-
-  
 }

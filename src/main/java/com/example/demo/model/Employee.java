@@ -33,9 +33,9 @@ public class Employee {
     @Column
     private String phone;
 
-    @OneToOne(mappedBy = "employee")
-    // @JsonIgnore
-    private User user;
+    // @OneToOne(mappedBy = "employee")
+    // // @JsonIgnore
+    // private User user;
 
 
     public Employee() {
