@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import javax.persistence.Entity;
 import java.util.List;
 import javax.persistence.Column;
@@ -12,46 +13,46 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_m_region")
 public class Region {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer id;
-    
-    @Column
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column
+  private Integer id;
 
-    @OneToMany(mappedBy = "region")
-    List<Department> departments;
+  @Column
+  private String name;
 
-    public Region(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  @OneToMany(mappedBy = "region")
+  List<Department> departments;
 
-    public Region() {
-    }
+  public Region(Integer id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Region() {
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public List<Department> getDepartments() {
-        return departments;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setDepartments(List<Department> departments) {
-        this.departments = departments;
-    }
+  public List<Department> getDepartments() {
+    return departments;
+  }
+
+  public void setDepartments(List<Department> departments) {
+    this.departments = departments;
+  }
 }

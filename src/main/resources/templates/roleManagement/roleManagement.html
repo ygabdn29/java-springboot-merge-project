@@ -14,6 +14,7 @@
           <th>ID</th>
           <th>Username</th>
           <th>Role</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -21,6 +22,7 @@
           <td th:text="${user.id}"></td>
           <td th:text="${user.username}"></td>
           <td th:text="${user.role.getName()}"></td>
+          <td><a th:href="@{{id}/role(id=${user.id}) }">EDIT</a></td>
         </tr>
       </tbody>
     </table>

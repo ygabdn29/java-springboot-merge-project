@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,48 +12,48 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_m_department")
 public class Department {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer id;
-    
-    @Column
-    private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column
+  private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "region_id", referencedColumnName = "id")
-    private Region region;
+  @Column
+  private String name;
 
-    public Department() {
-    }
+  @ManyToOne
+  @JoinColumn(name = "region_id", referencedColumnName = "id")
+  private Region region;
 
-    public Department(Integer id, String name, Region region) {
-        this.id = id;
-        this.name = name;
-        this.region = region;
-    }
+  public Department() {
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Department(Integer id, String name, Region region) {
+    this.id = id;
+    this.name = name;
+    this.region = region;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Region getRegion() {
-        return region;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setRegion(Region region) {
-        this.region = region;
-    }
+  public Region getRegion() {
+    return region;
+  }
+
+  public void setRegion(Region region) {
+    this.region = region;
+  }
 }

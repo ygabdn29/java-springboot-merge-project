@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Role</title>
+  </head>
+  <body>
+    <h1>Update Employee Role</h1>
+
+    <form
+      th:action="@{/userlogin/role/update}"
+      method="post"
+      th:object="${user}"
+    >
+      <input type="hidden" th:field="*{id}" value="${user.id}" />
+      <input type="hidden" th:field="*{password}" value="${user.password}" />
+
+      <label for="username">Username: </label>
+      <input
+        readonly
+        type="text"
+        th:field="*{username}"
+        th:value="${user.username}"
+        id="username"
+      />
+
+      <label for="role">Update Role: </label>
+      <select th:field="*{role}" id="role">
+        <option
+          th:each="role : ${roles}"
+          th:value="${role.id}"
+          th:text="${role.name}"
+        ></option>
+      </select>
+
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
