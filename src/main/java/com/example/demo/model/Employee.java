@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "tb_m_employee")
 public class Employee {
@@ -21,21 +23,20 @@ public class Employee {
   @Column
   private String name;
 
-  @Column
-  private String email;
 
   @Column
-  private LocalDate birthDate;
+  private String email;
+    @Column(name = "birth_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
+
 
   @Column
   private String address;
 
-  @Column
-  private String phone;
 
-  // @OneToOne(mappedBy = "employee")
-  // // @JsonIgnore
-  // private User user;
+    @OneToOne(mappedBy = "employee")
+    private User user;
 
   public Employee() {
   }
@@ -97,12 +98,11 @@ public class Employee {
     this.phone = phone;
   }
 
-  // public User getUser() {
-  // return user;
-  // }
+    public User getUser() {
+        return user;
+    }
 
-  // public void setUser(User user) {
-  // this.user = user;
-  // }
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -7,5 +7,5 @@ import com.example.demo.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-  
+    // @Query(value = "SELECT id FROM tb_m_role WHERE level = (SELECT MIN(level) FROM tb_m_role);")  
 }

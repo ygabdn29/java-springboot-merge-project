@@ -1,13 +1,13 @@
-package com.example.demo.service.implementation;
+package com.example.demo5.service.implementation;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
+import com.example.demo5.model.User;
+import com.example.demo5.repository.UserRepository;
+import com.example.demo5.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,9 +24,11 @@ public class UserServiceImpl implements UserService {
     return userRepository.findById(key).orElse(null);
   }
 
+
   @Override
   public Boolean save(User entity) {
     userRepository.save(entity);
+
     return userRepository.findById(entity.getId()).isPresent();
   }
 
