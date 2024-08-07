@@ -11,7 +11,7 @@ public class Utils {
     Map<String, Object> response = new HashMap<>();
     response.put("status", httpStatus);
     response.put("message", message);
-    return new ResponseEntity<Object>(response, httpStatus);
+    return new ResponseEntity<>(response, httpStatus);
   }
 
   public static ResponseEntity<Object> generaResponseEntity(HttpStatus httpStatus, String message, Object data){
@@ -19,8 +19,6 @@ public class Utils {
     response.put("status", httpStatus);
     response.put("message", message);
     response.put("data", data);
-    return new ResponseEntity<Object>(response, httpStatus);
+    return new ResponseEntity<>(response,httpStatus);
   }
 }
-
-

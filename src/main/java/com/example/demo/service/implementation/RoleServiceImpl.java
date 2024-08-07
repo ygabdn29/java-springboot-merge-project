@@ -27,7 +27,7 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public Boolean save(Role entity) {
     Role role = roleRepository.save(entity);
-    return role.getId().equals(null);
+    return !role.getId().equals(null);
   }
 
   @Override

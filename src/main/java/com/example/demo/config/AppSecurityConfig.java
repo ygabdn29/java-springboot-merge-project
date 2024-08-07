@@ -3,6 +3,7 @@ package com.example.demo.config;
 import javax.management.RuntimeErrorException;
 
 import org.springframework.context.annotation.Bean;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -33,6 +34,7 @@ public class AppSecurityConfig {
                             .antMatchers("/account/welcome").authenticated()
                             .antMatchers("/account/find-email").permitAll()
                             .antMatchers("/account/role").authenticated()
+                            .antMatchers("/api/account/**").permitAll()
                             .anyRequest().permitAll()
                             .and()
                             .formLogin()
@@ -47,7 +49,6 @@ public class AppSecurityConfig {
                             
 
                 } catch (Exception e) {
-                    // TODO: handle exception
                     throw new RuntimeErrorException(null);
                 }
            

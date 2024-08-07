@@ -1,9 +1,6 @@
 package com.example.demo.service.implementation;
 
-
 import java.util.List;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +17,6 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
   @Override
   public List<User> get() {
     return userRepository.findAll();
@@ -32,7 +26,6 @@ public class UserServiceImpl implements UserService {
   public User get(Integer key) {
     return userRepository.findById(key).orElse(null);
   }
-
 
   @Override
   public Boolean save(User entity) {
@@ -57,15 +50,26 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-    public User validatePassword(User user, String recentPassword, String newPassword, String confirmPassword) {
-        if (!passwordEncoder.matches(recentPassword, user.getPassword())) {
-            return null; // Recent password is incorrect
-        }
-        if (!newPassword.equals(confirmPassword)) {
-            return null; // New password and confirm password do not match
-        }
-        return user; // Passwords are valid
-}
+  public User validatePassword(User user, String recentPassword, String newPassword, String confirmPassword) {
+      if (!passwordEncoder.matches(recentPassword, user.getPassword())) {
+          return null; // Recent password is incorrect
+      }
+      if (!newPassword.equals(confirmPassword)) {
+          return null; // New password and confirm password do not match
+      }
+      return user; // Passwords are valid
+  }
+
+  @Override
+  public User verifyUser(String guidString) {
+    User user = userRepository.findByGuid(guidString);
+    if (user != null) {
+      return user;
+    }
+
+    return null;
+  }
+
     @Override
     public Boolean isValidPassword(String password) {
       // cek panjang password
@@ -103,4 +107,5 @@ public class UserServiceImpl implements UserService {
       // false jika password tidak sesuai
       return false;
     }
+
 }

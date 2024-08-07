@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "tb_m_employee")
 public class Employee {
@@ -37,6 +39,7 @@ public class Employee {
   private String address;
   
   @OneToOne(mappedBy = "employee")
+  @JsonIgnore
   private User user;
 
   public Employee() {
