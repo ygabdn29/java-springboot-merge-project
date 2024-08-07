@@ -50,14 +50,12 @@ public class User{
   }
 
 
-  public User(String password, String username, Role role, Integer id, Boolean isVerified, String guid,
-      Employee employee) {
+  public User(String password, String username, Role role, Boolean isVerified, Integer id, Employee employee) {
     this.password = password;
     this.username = username;
     this.role = role;
-    this.id = id;
     this.isVerified = isVerified;
-    this.guid = guid;
+    this.id = id;
     this.employee = employee;
   }
   public String getPassword() {
@@ -89,6 +87,7 @@ public class User{
 
   public void setRole(Role role) {
     this.role = role;
+
   }
 
   public Integer getId() {
@@ -98,7 +97,6 @@ public class User{
   public void setId(Integer id) {
     this.id = id;
   }
-
 
   public String getGuid() {
     return guid;

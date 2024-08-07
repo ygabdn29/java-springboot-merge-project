@@ -7,5 +7,5 @@ import com.example.demo.model.Region;
 
 @Repository
 
-public interface RegionRepository extends JpaRepository<Region, Integer>{
+public interface RegionRepository extends JpaRepository <Region, Integer>{
 }
