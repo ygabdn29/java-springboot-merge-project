@@ -1,9 +1,6 @@
 package com.example.demo.service.implementation;
 
-
 import java.util.List;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +26,6 @@ public class UserServiceImpl implements UserService {
   public User get(Integer key) {
     return userRepository.findById(key).orElse(null);
   }
-
 
   @Override
   public Boolean save(User entity) {
@@ -67,11 +63,10 @@ public class UserServiceImpl implements UserService {
   @Override
   public User verifyUser(String guidString) {
     User user = userRepository.findByGuid(guidString);
-
-    if(user != null){
-      user.setIsVerified(true);
+    if (user != null) {
       return user;
     }
+
     return null;
   }
 
@@ -112,4 +107,5 @@ public class UserServiceImpl implements UserService {
       // false jika password tidak sesuai
       return false;
     }
+
 }

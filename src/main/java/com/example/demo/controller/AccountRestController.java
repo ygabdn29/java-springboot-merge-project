@@ -28,24 +28,93 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.handler.Utils;
 import com.example.demo.model.Employee;
 import com.example.demo.model.User;
+import com.example.demo.model.dto.UserDto;
+import com.example.demo.model.dto.RegistrationDTO;
 import com.example.demo.service.EmailService;
-import com.example.demo.service.EmployeeService;
-
+import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
-
+import com.example.demo.service.EmployeeService;
 
 @RestController
 @RequestMapping("api/account")
 public class AccountRestController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private EmailService emailService;
+  @Autowired
+  private EmployeeService employeeService;
+
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private RoleService roleService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private EmailService emailService;
+
+//   Nilam
+  @PostMapping("/register")
+  public ResponseEntity<Object> register(@RequestBody RegistrationDTO registrationDTO) {
+    try {
+      Employee employee = new Employee(null, registrationDTO.getName(), registrationDTO.getEmail(), registrationDTO.getBirthDate(), registrationDTO.getAddress(), registrationDTO.getPhone());
+      employeeService.save(employee);
+
+      Role defaultRole = roleService.getRoleWithLowestLevel();
+      String guid = UUID.randomUUID().toString();
+      User user = new User(registrationDTO.getPassword(), registrationDTO.getUsername(), defaultRole, false, null, employee);
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+      user.setEmployee(employee);
+      user.setGuid(guid);
+      userService.save(user);
+
+      String subject = "Email Verification";
+      String confirmationUrl = "http://localhost:8080/api/account/verify/" + user.getGuid();
+      String message = "Click the link to verify your email: \n" + confirmationUrl;
+      emailService.sendEmail(employee.getEmail(), subject, message);
+
+      return Utils.generaResponseEntity(HttpStatus.OK,
+          "Registration Successful. A verification email has been sent to your email address.");
+    } catch (Exception e) {
+      return Utils.generaResponseEntity(HttpStatus.OK,
+          "Registration Failed: " + e.getMessage());
+    }
+  }
+
+  @PostMapping("/verify/{guid}")
+  public ResponseEntity<Object> verifyEmail(@PathVariable String guid) {
+    User user = userService.verifyUser(guid);
+    if (user != null) {
+      user.setIsVerified(true);
+      user.setGuid(null);
+      userService.save(user);
+      return Utils.generaResponseEntity(HttpStatus.OK, "Verification Account successfully");
+    }
+    return Utils.generaResponseEntity(HttpStatus.OK, "Verification Failed");
+  }
+
+   
+//  Anggia
+    @GetMapping("list")
+    public ResponseEntity<Object> get(@RequestHeader("X-token-account-key") String token ){
+        if(token.equals("123456789")){
+            List<User> users = userService.get();
+            return Utils.generateResponseEntity(HttpStatus.OK, "Data has been retrieved", users);
+        }
+        return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Data can't be accessed. Token is invalid");
+    } 
+
+    @PostMapping("role/save")
+    public ResponseEntity<Object> save(@RequestHeader("X-token-account-key") String token, @RequestBody UserDto userDto){
+        if(token.equals("123456789")){
+            User user2 = userService.get(userDto.getEmployee_id());
+            user2.setRole(roleService.get(userDto.getRole_id()));
+            userService.save(user2);
+            return Utils.generateResponseEntity(HttpStatus.OK, "Role has been assigned", userDto);
+        }
+        return Utils.generateResponseEntity(HttpStatus.BAD_REQUEST, "Role can't be assigned. Token is invalid");
+    }
 
 //   reza
     @GetMapping("password") //kirim email

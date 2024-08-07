@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+
 public interface EmailService {
-  public void sendMail(String toEmail, String Subject, String body);
+  public void sendEmail (String toEmail, String subject, String body);
+
 }

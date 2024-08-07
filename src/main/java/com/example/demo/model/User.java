@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_m_user")
+
 public class User{
   @Column(name ="password")
   private String password;
-
 
   @Column(name ="username")
   private String username;
@@ -31,11 +31,16 @@ public class User{
   @JoinColumn(name = "role_id", referencedColumnName = "id")
   private Role role;
 
-
   @Id
   @Column
   private Integer id;
-    
+
+  @Column
+  private Boolean isVerified;
+
+  @Column
+  private String guid;
+
   @OneToOne
   @MapsId
   @JsonIgnore
@@ -44,20 +49,15 @@ public class User{
   public User() {
   }
 
-  
-  public User(String password, String username, Boolean isVerified, String guid, Role role, Integer id,
-      Employee employee) {
+
+  public User(String password, String username, Role role, Boolean isVerified, Integer id, Employee employee) {
     this.password = password;
     this.username = username;
-    this.isVerified = isVerified;
-    this.guid = guid;
     this.role = role;
+    this.isVerified = isVerified;
     this.id = id;
     this.employee = employee;
   }
-
-
-
   public String getPassword() {
     return password;
   }
@@ -73,7 +73,6 @@ public class User{
   public void setUsername(String username) {
     this.username = username;
   }
-
   public Boolean getIsVerified() {
     return isVerified;
   }
@@ -88,6 +87,7 @@ public class User{
 
   public void setRole(Role role) {
     this.role = role;
+
   }
 
   public Integer getId() {
@@ -98,6 +98,14 @@ public class User{
     this.id = id;
   }
 
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
+  }
+
   public Employee getEmployee() {
     return employee;
   }
@@ -106,11 +114,4 @@ public class User{
     this.employee = employee;
   }
 
-  public String getGuid() {
-    return guid;
-  }
-
-  public void setGuid(String guid) {
-    this.guid = guid;
-  }
 }
