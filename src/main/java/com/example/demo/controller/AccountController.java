@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,7 +25,6 @@ import com.example.demo.model.User;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
-
 
 @Controller
 @RequestMapping("account")
@@ -49,37 +47,37 @@ public class AccountController {
 
   @PostMapping("login")
   public String login(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
-    User userLogin = userService.authenticate(username, password); 
-    try{
+    User userLogin = userService.authenticate(username, password);
+    try {
       // get data dari repo USER
       // ID & Roles
       org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(
-        userLogin.getId().toString(), // ID yang login
-        "", // Password
-        getAuthorities(userLogin.getRole().getName())); //Role yang dimiliki akun tersebut
+          userLogin.getId().toString(), // ID yang login
+          "", // Password
+          getAuthorities(userLogin.getRole().getName())); // Role yang dimiliki akun tersebut
 
-        PreAuthenticatedAuthenticationToken authenticationToken = new PreAuthenticatedAuthenticationToken(
+      PreAuthenticatedAuthenticationToken authenticationToken = new PreAuthenticatedAuthenticationToken(
           user, // dari instance object user diatas
-          "", 
+          "",
           user.getAuthorities()); // Dari instance object user diatas
 
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        session.setAttribute("user", userLogin);
-        return "redirect:welcome"; // routing
-    }catch(Exception e){
+      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+      session.setAttribute("user", userLogin);
+      return "redirect:welcome"; // routing
+    } catch (Exception e) {
       // handle exception
       return "login/indexlogin"; // filenya
     }
 
   }
 
-  private static Collection<? extends GrantedAuthority> getAuthorities(String role){
+  private static Collection<? extends GrantedAuthority> getAuthorities(String role) {
     final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
     authorities.add(new SimpleGrantedAuthority(role));
     return authorities;
   }
 
-  @GetMapping("welcome") //@PathVariable Integer userId
+  @GetMapping("welcome") // @PathVariable Integer userId
   public String welcome(Model model, HttpSession session) {
     User loggedInUser = (User) session.getAttribute("user");
     if (loggedInUser == null) {
@@ -132,14 +130,14 @@ public class AccountController {
     return "account/register";
   }
 
-   @PostMapping("save")
-   public String save(User user) {
-        Role defaultRole = roleService.getRoleWithLowestLevel(); // EMPLOYEE ROLE (LOWEST LEVEL)  
-        user.setPassword(passwordEncoder.encode(user.getPassword()));      
-        employeeService.save(user.getEmployee());      
-        user.setRole(defaultRole);  
-        return userService.save(user) ? "redirect:/account/formlogin" : "account/register";
-   }
+  @PostMapping("save")
+  public String save(User user) {
+    Role defaultRole = roleService.getRoleWithLowestLevel(); // EMPLOYEE ROLE (LOWEST LEVEL)
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    employeeService.save(user.getEmployee());
+    user.setRole(defaultRole);
+    return userService.save(user) ? "redirect:/account/formlogin" : "account/register";
+  }
 
   @GetMapping("{id}/role")
   public String roleEdit(@PathVariable Integer id, Model model) {
@@ -205,16 +203,6 @@ public class AccountController {
     session.invalidate();
     redirectAttributes.addFlashAttribute("successMsg", "Your password has been successfully changed.");
     return "redirect:/account/formlogin";
-  } 
-
-
-
-  private static Collection<? extends GrantedAuthority> getAuthorities(String role) {
-    final List<SimpleGrantedAuthority> authorities = new LinkedList<>();
-    authorities.add(new SimpleGrantedAuthority(role));
-    return authorities;
   }
-
-  
 
 }

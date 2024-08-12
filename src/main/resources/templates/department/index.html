@@ -30,8 +30,9 @@
       <table class="table table-bordered" id="myTable">
         <thead>
           <tr>
-            <td>Region ID</td>
-            <td>Name</td>
+            <td>Department ID</td>
+            <td>Department Name</td>
+            <td>Region</td>
             <td>Action</td>
           </tr>
         </thead>
@@ -66,12 +67,24 @@
           <div class="modal-body">
             <form>
               <div class="form-group" hidden>
-                <label for="region-id" class="control-label">Id:</label>
-                <input type="text" class="form-control" id="region-id" />
+                <label for="department-id" class="control-label">Id:</label>
+                <input type="text" class="form-control" id="department-id" />
               </div>
               <div class="form-group">
-                <label for="region-name" class="control-label">Name:</label>
-                <textarea class="form-control" id="region-name"></textarea>
+                <label for="department-name" class="control-label"
+                  >Department Name:</label
+                >
+                <textarea class="form-control" id="department-name"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="department-region" class="control-label"
+                  >Region:</label
+                >
+                <select
+                  class="form-control"
+                  id="department-region"
+                  onfocus="getRegions()"
+                ></select>
               </div>
             </form>
           </div>
@@ -87,7 +100,7 @@
               type="button"
               class="btn btn-danger waves-effect waves-light"
               onclick="create()"
-              id="region-submit"
+              id="department-submit"
             >
               Save changes
             </button>
@@ -109,10 +122,10 @@
       $(document).ready(() => {
         $("#myTable").DataTable({
           ajax: {
-            url: "/api/regions",
+            url: "/api/department/get-all",
             type: "GET",
             headers: {
-              "x-token-key": "Abcdefgh",
+              "x-token-department": "Abcdefgh",
             },
             dataSrc: "data",
             //dataSrc:"" -> kalo misal datanya itu masih belom make custom response
@@ -125,7 +138,7 @@
               orderable: false,
             },
             {
-              targets: [2],
+              targets: [3],
               searchable: false,
               orderable: false,
             },
@@ -138,10 +151,13 @@
               data: "name",
             },
             {
+              data: "region.name",
+            },
+            {
               render: (data, type, full, meta) => {
                 let html = "";
                 html += `<a data-toggle="modal"
-        data-target="#responsive-modal" onclick= "modalEdit(${full.id})"><i class="fa fa-pencil"></i> Edit</a> | <a onclick= "remove(${full.id})">
+        data-target="#responsive-modal" onClick= "modalEdit(${full.id})"><i class="fa fa-pencil"></i> Edit</a> | <a onClick= "remove(${full.id})">
             <i class="fa fa-trash-o"></i> Delete</a>`;
                 return html;
               },
@@ -149,24 +165,27 @@
           ],
         });
       });
-
+      // let getId = (id) => {
+      //   console.log($(id).data("id"));
+      // }
       let create = () => {
-        let region = {
-            id : $("#region.id").val(),
-            name : $("#region-name").val()
-        }
-          $.ajax({
-            url: "/api/region/save",
-            type: "POST",
-            headers: {
-              "x-token-key":"Abcdefgh"
-            },
-            contentType: "application/json",
-            data: JSON.stringify(region),
+        let department = {
+          id: $("#department-id").val(),
+          name: $("#department-name").val(),
+          region_id: $("#department-region").val(),
+        };
+        $.ajax({
+          url: "/api/department/save",
+          type: "POST",
+          headers: {
+            "x-token-department": "Abcdefgh",
+          },
+          contentType: "application/json",
+          data: JSON.stringify(department),
         })
           .done((res) => {
             console.log(res);
-            $('#myTable').DataTable().ajax.reload();
+            $("#myTable").DataTable().ajax.reload();
             $("#responsive-modal").modal("hide");
           })
           .fail((e) => {
@@ -175,19 +194,19 @@
       };
 
       let edit = (id) => {
-        console.log(id);
-        let region = {
+        let department = {
           id: id,
-          name: $("#region-name").val()
+          name: $("#department-name").val(),
+          region_id: $("#department-region").val(),
         };
         $.ajax({
-          url: "/api/region/save",
+          url: "/api/department/save",
           type: "POST",
           headers: {
-            "x-token-key": "Abcdefgh",
+            "x-token-department": "Abcdefgh",
           },
           contentType: "application/json",
-          data: JSON.stringify(region),
+          data: JSON.stringify(department),
         })
           .done((res) => {
             console.log(res);
@@ -201,29 +220,25 @@
 
       let remove = (id) => {
         $.ajax({
-          url: `/api/region/delete/${id}`,
+          url: `/api/department/delete/${id}`,
           type: "DELETE",
-          headers:{
-            "x-token-key" : "Abcdefgh"
+          headers: {
+            "x-token-department": "Abcdefgh",
           },
-          contentType: "application/json"
-        }).done((res)=>{
-          console.log(res);
-          $("#myTable").DataTable().ajax.reload();
-        }).fail((e)=>{
-          console.log(e);
+          contentType: "application/json",
         })
+          .done((res) => {
+            console.log(res);
+            $("#myTable").DataTable().ajax.reload();
+          })
+          .fail((e) => {
+            console.log(e);
+          });
       };
 
-      let modalCreate = () => {
-        $("#region-id").val("");
-        $("#region-name").val("");
-        $("#region-submit").attr("onclick", "create()");
-      };
-
-      let modalEdit = (id) => {
+      let getRegions = () => {
         $.ajax({
-          url: `/api/region/${id}`,
+          url: "/api/regions",
           type: "GET",
           headers: {
             "x-token-key": "Abcdefgh",
@@ -231,16 +246,51 @@
           contentType: "application/json",
         })
           .done((res) => {
+            console.log(res.data);
+            let regions = res.data;
+            let regionSelect = $("#department-region");
+            regionSelect.empty();
+            regionSelect.append(`<option value="">Select a region</option>`);
+
+            regions.forEach((region) => {
+              regionSelect.append(
+                `<option value="${region.id}">${region.name}</option>`
+              );
+            });
+          })
+          .fail((e) => {
+            console.error("Failed to fetch regions:", e);
+          });
+      };
+      $("#responsive-modal").on("show.bs.modal", getRegions);
+
+      let modalCreate = () => {
+        $("#department-id").val("");
+        $("#department-name").val("");
+        $("#department-region").val("");
+        $("#department-submit").attr("onclick", "create()");
+      };
+
+      let modalEdit = (id) => {
+        $.ajax({
+          url: `/api/department/get/${id}`,
+          type: "GET",
+          headers: {
+            "x-token-department": "Abcdefgh",
+          },
+          contentType: "application/json",
+        })
+          .done((res) => {
             console.log(res);
-            $("#region-id").val(res.data.id);
-            $("#region-name").val(res.data.name);
-            $("#region-submit").attr("onclick", `edit(${id})`);
+            $("#department-id").val(res.data.id);
+            $("#department-name").val(res.data.name);
+            $("#department-region").val(res.data.region_id);
+            $("#department-submit").attr("onclick", `edit(${id})`);
           })
           .fail((e) => {
             console.log(e);
           });
       };
-
     </script>
     <script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
   </body>

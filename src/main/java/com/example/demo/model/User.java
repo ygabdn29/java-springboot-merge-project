@@ -35,12 +35,6 @@ public class User{
   @Column
   private Integer id;
 
-  @Column
-  private Boolean isVerified;
-
-  @Column
-  private String guid;
-
   @OneToOne
   @MapsId
   @JsonIgnore
