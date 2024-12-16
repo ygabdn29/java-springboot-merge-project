@@ -1,14 +1,16 @@
 package com.example.demo.model;
 
-import javax.persistence.Entity;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_m_region")
@@ -22,7 +24,9 @@ public class Region {
   private String name;
 
   @OneToMany(mappedBy = "region")
+  @JsonIgnore
   List<Department> departments;
+ 
 
   public Region(Integer id, String name) {
     this.id = id;

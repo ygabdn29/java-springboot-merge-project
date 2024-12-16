@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <td>Region ID</td>
+                <td>Name</td>
+                <td>Action</td>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="region: ${regions}">
+                <td th:text="${region.id}"></td>
+                <td th:text="${region.name}"></td>
+                <td><a th:href="@{/account/password/change/{id}(id=${user.id})}">Change Password</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Role;
-import com.example.demo.model.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.RoleService;
+
 @Service
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
   @Autowired
   private RoleRepository roleRepository;
-
 
   @Override
   public List<Role> get() {
@@ -28,7 +27,7 @@ public class RoleServiceImpl implements RoleService{
   @Override
   public Boolean save(Role entity) {
     Role role = roleRepository.save(entity);
-    return role.getId().equals(null);
+    return !role.getId().equals(null);
   }
 
   @Override
@@ -36,4 +35,9 @@ public class RoleServiceImpl implements RoleService{
     roleRepository.deleteById(id);
     return roleRepository.findById(id).isEmpty();
   }
+
+  @Override
+  public Role getRoleWithLowestLevel() {
+    return roleRepository.findRoleWithLowestLevel();
+}
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>User List</title>
+</head>
+<body>
+    <!-- <a th:href="@{/employee/form}"><h1>Add New Employee's Data</h1></a> -->
+    <table>
+        <thead>
+            <tr>
+                <td>User ID</td>
+                <td>Username</td>
+                <td>Password</td>
+                <td>Action</td>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user: ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.password}"></td>
+                <td><a th:href="@{/account/password/change/{id}(id=${user.id})}">Change Password</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
